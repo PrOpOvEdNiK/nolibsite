@@ -1,5 +1,7 @@
 <?php
 
+use BS\Settings\Config;
+
 spl_autoload_register(
     function ($class) {
         // project-specific namespace prefix
@@ -32,3 +34,11 @@ spl_autoload_register(
 
 require_once __DIR__ . "/include/functions.php";
 require_once __DIR__ . "/include/constants.php";
+
+if (Config::getMode() == 'dev') {
+    ini_set('display_errors', 'stderr');
+    error_reporting(E_ERROR | E_WARNING | E_PARSE);
+} else {
+    ini_set('display_errors', 'off');
+    error_reporting(0);
+}

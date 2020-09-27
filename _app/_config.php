@@ -4,7 +4,8 @@ return [
     'connection' => [
     ],
     'app'        => [
-        'debug' => true,
-        'name'  => 'Анкетирование',
+        'mode'          => 'dev',
+        'assetsVersion' => '0.1',
+        'name'          => 'Анкетирование',
     ]
 ];

@@ -70,4 +70,14 @@ final class Config
         $path = $_SERVER['DOCUMENT_ROOT'] . self::CONFIG_FILE_PATH;
         return preg_replace("'[\\\\/]+'", "/", $path);
     }
+
+    public static function getDsn()
+    {
+        return self::getValue('connection');
+    }
+
+    public static function getMode()
+    {
+        return self::getValue('app')['mode'];
+    }
 }

@@ -18,7 +18,7 @@ final class Connection
 
     public function __construct()
     {
-        $arDsn = Config::getValue('connection');
+        $arDsn = Config::getDsn();
         $dsn = "mysql:host={$arDsn['host']};dbname={$arDsn['database']};charset=utf8";
 
         $arPdoOptions = [
