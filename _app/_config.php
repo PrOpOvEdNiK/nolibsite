@@ -2,6 +2,10 @@
 
 return [
     'connection' => [
+        'host'     => 'anketa.buynitsky.ru',
+        'database' => 'anketa_buynitsky',
+        'user'     => 'anketa',
+        'password' => '',
     ],
     'app'        => [
         'mode'          => 'dev',
