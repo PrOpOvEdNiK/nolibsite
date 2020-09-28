@@ -2,6 +2,8 @@
 
 use BS\Settings\Config;
 
+session_start();
+
 spl_autoload_register(
     function ($class) {
         // project-specific namespace prefix

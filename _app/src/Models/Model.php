@@ -4,6 +4,7 @@
 namespace BS\Models;
 
 
+use BS\App\Validator;
 use BS\Facades\DB;
 
 abstract class Model
@@ -12,14 +13,16 @@ abstract class Model
 
     abstract public static function getMap();
 
-    public static function create($arFields)
+    public static function create($arFields): bool
     {
+        static::validateFields($arFields);
+
         $table = static::getTableName();
         $sBindings = static::prepareInsertBindings($arFields);
         return DB::insert("INSERT INTO {$table} {$sBindings};", $arFields);
     }
 
-    public static function read($arFilter = [], $arSelect = ['*'], $arOrder = [], $arLimit = [])
+    public static function read($arFilter = [], $arSelect = ['*'], $arOrder = [], $arLimit = []): array
     {
         $table = static::getTableName();
         $sSelect = implode(', ', $arSelect);
@@ -35,8 +38,10 @@ abstract class Model
         );
     }
 
-    public static function update($arFilter, $arFields)
+    public static function update($arFilter, $arFields): int
     {
+        static::validateFields($arFields);
+
         $table = static::getTableName();
 
         [$sFilter, $arValuesMapFilter] = static::prepareSelectBindings($arFilter);
@@ -48,7 +53,7 @@ abstract class Model
         );
     }
 
-    public static function delete($arFilter)
+    public static function delete($arFilter): int
     {
         $table = static::getTableName();
 
@@ -60,7 +65,7 @@ abstract class Model
         );
     }
 
-    protected static function prepareInsertBindings($arFields)
+    protected static function prepareInsertBindings($arFields): string
     {
         $arKeys = $arValues = [];
 
@@ -80,7 +85,7 @@ abstract class Model
         return "({$sKeys}) VALUES ({$sValues})";
     }
 
-    protected static function prepareSelectBindings($arFilter)
+    protected static function prepareSelectBindings($arFilter): array
     {
         $arFilterParts = [];
         $arValuesMap = [];
@@ -97,7 +102,7 @@ abstract class Model
         return [$sFilter, $arValuesMap];
     }
 
-    protected static function prepareUpdateBindings($arFields)
+    protected static function prepareUpdateBindings($arFields): array
     {
         $arSetParts = $arValuesMap = [];
         foreach ($arFields as $kField => $vField) {
@@ -113,7 +118,7 @@ abstract class Model
         return [$sUpdate, $arValuesMap];
     }
 
-    protected static function prepareLimitClause($arLimit)
+    protected static function prepareLimitClause($arLimit): string
     {
         $limit = $arLimit[0] ?? DB_FALLBACK_LIMIT;
         $offset = $arLimit[1] ?? 0;
@@ -121,7 +126,7 @@ abstract class Model
         return "LIMIT {$offset},{$limit}";
     }
 
-    protected static function prepareOrderClause($arOrder)
+    protected static function prepareOrderClause($arOrder): string
     {
         $sOrder = implode(', ', $arOrder);
 
@@ -129,5 +134,21 @@ abstract class Model
             $sOrder = "ID DESC";
         }
         return "ORDER BY {$sOrder}";
+    }
+
+    public static function validateFields(&$arFields): void
+    {
+        $arErrors = [];
+
+        $arMap = static::getMap();
+        foreach ($arFields as $kField => &$vField) {
+            $validateFunction = $arMap[$kField]['TYPE'];
+            $vField = Validator::$validateFunction($arMap[$kField], $vField, $arErrors[$kField]);
+        }
+
+        $arErrors = array_filter($arErrors);
+        if ($arErrors) {
+            throw new ValidateException($arErrors);
+        }
     }
 }

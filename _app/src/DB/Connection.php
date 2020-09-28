@@ -30,7 +30,7 @@ final class Connection
         $this->PDO = new PDO($dsn, $arDsn['user'], $arDsn['password'], $arPdoOptions);
     }
 
-    public function prepareBindings(array $bindings)
+    public function prepareBindings(array $bindings): array
     {
         foreach ($bindings as $key => $value) {
             if ($value instanceof DateTimeInterface) {
@@ -43,7 +43,7 @@ final class Connection
         return $bindings;
     }
 
-    public function bindValues(PDOStatement $statement, $bindings)
+    public function bindValues(PDOStatement $statement, $bindings): void
     {
         foreach ($bindings as $key => $value) {
             $statement->bindValue(
@@ -105,6 +105,11 @@ final class Connection
         $this->PDO = null;
     }
 
+    /**
+     * @deprecated QueryBuilder когда-нибудь будет
+     *
+     * @return QueryBuilder
+     */
     public function query(): QueryBuilder
     {
         return new QueryBuilder($this);

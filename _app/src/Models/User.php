@@ -4,6 +4,8 @@
 namespace BS\Models;
 
 
+use BS\App\Validator;
+
 class User extends Model
 {
     public static function getTableName()
@@ -15,38 +17,57 @@ class User extends Model
     {
         return [
             "ID"             => [
-                "TYPE" => "bigint",
+                "TYPE" => Validator::INT,
                 "AUTO" => true
             ],
             "LAST_NAME"      => [
-                "TYPE" => "varchar"
+                "TYPE"       => Validator::STRING,
+                "MIN_LENGTH" => 2,
+                "MAX_LENGTH" => 50
             ],
             "FIRST_NAME"     => [
-                "TYPE" => "varchar"
+                "TYPE"       => Validator::STRING,
+                "MIN_LENGTH" => 2,
+                "MAX_LENGTH" => 50
             ],
             "SECOND_NAME"    => [
-                "TYPE" => "varchar"
+                "TYPE"       => Validator::STRING,
+                "MIN_LENGTH" => 2,
+                "MAX_LENGTH" => 50
             ],
             "BIRTH_DATE"     => [
-                "TYPE" => "date"
+                "TYPE"   => Validator::DATE,
+                "FORMAT" => "Y-m-d"
             ],
             "GENDER"         => [
-                "TYPE" => "char"
+                "TYPE"   => Validator::STRING,
+                "EQUALS" => 1
             ],
             "FAVORITE_COLOR" => [
-                "TYPE" => "char"
+                "TYPE"   => Validator::STRING,
+                "EQUALS" => 7
             ],
             "PROFILE"        => [
-                "TYPE" => "text"
+                "TYPE"       => Validator::STRING,
+                "MAX_LENGTH" => 1000
             ],
             "SKILS"          => [
-                "TYPE" => "text"
+                "TYPE" => Validator::SERIALIZE,
             ],
             "AVATAR"         => [
-                "TYPE" => "bigint"
+                "TYPE"      => Validator::INT,
+                "MAX_RANGE" => 32
             ],
             "GALLERY"        => [
-                "TYPE" => "text"
+                "TYPE" => Validator::SERIALIZE,
+            ],
+            "PASSWORD"       => [
+                "TYPE"       => Validator::STRING,
+                "MAX_LENGTH" => 50
+            ],
+            "HASH"           => [
+                "TYPE"       => Validator::STRING,
+                "MAX_LENGTH" => 50
             ],
         ];
     }
