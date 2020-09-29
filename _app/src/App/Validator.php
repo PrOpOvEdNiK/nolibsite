@@ -12,6 +12,7 @@ class Validator
     public const STRING = 'string';
     public const DATE = 'date';
     public const SERIALIZE = 'serialize';
+    public const EMAIL = 'email';
 
     public static function int(array $arRules, $value, &$arErrors): int
     {
@@ -73,5 +74,15 @@ class Validator
         }
 
         return \serialize($value);
+    }
+
+    public static function email(array $arRules, $value, &$arErrors):string
+    {
+        $email = filter_var(trim($value), FILTER_VALIDATE_EMAIL);
+        if (!$email) {
+            $arErrors[] = "Некорректный email";
+        }
+
+        return $email;
     }
 }

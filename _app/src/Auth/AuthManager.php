@@ -9,20 +9,62 @@ use BS\Models\ValidateException;
 
 class AuthManager
 {
-    private const SALT_REGISTER = "awesomeregistersalt";
-
-    private $session;
-    private $user;
+    private $arUser;
 
     private $arErrors = [];
 
     public function __construct()
     {
-        $this->session = $_SESSION['AUTH'];
+        $this->loginByHash($_SESSION['AUTH_HASH']);
+    }
 
-        if ($this->session['HASH']) {
-            $this->user = ""; // get by hash
+    private function loginById($id)
+    {
+        $this->logout();
+        $arUser = User::getById($id);
+        $this->loginInternal($arUser);
+    }
+
+    private function loginByHash($hash)
+    {
+        $this->logout();
+        $clientHash = Hasher::client();
+        if ($clientHash === $hash) {
+            $arUser = User::getByHash($_SESSION['AUTH_HASH']);
+            $this->loginInternal($arUser);
         }
+    }
+
+    private function loginInternal($arUser)
+    {
+        if ($arUser['ID']) {
+            $clientHash = Hasher::client();
+
+            if ($clientHash !== $_SESSION['AUTH_HASH']) {
+                User::update(['ID' => $arUser['ID']], ['HASH' => $clientHash]);
+            }
+
+            $arUser['HASH'] = $clientHash;
+            $this->arUser = $arUser;
+            $_SESSION['AUTH_HASH'] = $arUser['HASH'];
+        }
+    }
+
+    public function logout($redirect = ""): void
+    {
+        $_SESSION['AUTH_HASH'] = "";
+
+        if ($redirect != "") {
+            http_response_code("302 Moved Temporarily");
+            header("Location: " . $redirect);
+        }
+    }
+
+    public function login($login, $password): void
+    {
+        $password = Hasher::register($password);
+        $arUser = User::getFirst(['EMAIL' => $login, 'PASSWORD' => $password]);
+        $this->loginInternal($arUser);
     }
 
     public function register(array $arFields)
@@ -40,25 +82,41 @@ class AuthManager
         }
         unset($arFields['PASSWORD2']);
 
-        $arFields['PASSWORD'] = md5(md5($arFields['PASSWORD'] . self::SALT_REGISTER) . self::SALT_REGISTER);
+        $arFields['PASSWORD'] = Hasher::register($arFields['PASSWORD']);
+        $arFields['HASH'] = Hasher::client();
 
-        $userAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING);
-        $userIp = filter_input(INPUT_SERVER, 'REMOTE_ADDR', FILTER_SANITIZE_STRING);
-
-        $hashSalt = md5($userAgent) . md5($userIp);
-        $arFields['HASH'] = md5($hashSalt);
-
-        $isCreated = false;
+        $userId = 0;
         try {
-            $isCreated = User::create($arFields);
+            $userId = User::create($arFields);
         } catch (ValidateException $e) {
             $this->arErrors += unserialize($e->getMessage());
+        }
+
+        if ($userId == 0) {
+            $this->arErrors[] = "Ошибка при создании пользователя";
         }
 
         if ($this->arErrors) {
             return $this->arErrors;
         }
 
-        return $isCreated;
+        $this->loginById($userId);
+
+        return $userId;
+    }
+
+    public function check(): bool
+    {
+        return intval($this->arUser['ID']) > 0;
+    }
+
+    public function getUser(): array
+    {
+        return $this->arUser;
+    }
+
+    public function getUserFullName(): string
+    {
+        return "{$this->arUser['LAST_NAME']} {$this->arUser['FIRST_NAME']} {$this->arUser['SECOND_NAME']}";
     }
 }

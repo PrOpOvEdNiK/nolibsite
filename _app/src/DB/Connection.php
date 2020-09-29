@@ -77,7 +77,7 @@ final class Connection
         return $statement->rowCount();
     }
 
-    public function select($query, $bindings = [])
+    public function select($query, $bindings = []): array
     {
         $statement = $this->getPreparedStatment($query, $bindings);
         $statement->execute();
@@ -85,9 +85,13 @@ final class Connection
         return $statement->fetchAll();
     }
 
-    public function insert($query, $bindings = []): bool
+    public function insert($query, $bindings = []): int
     {
-        return $this->statement($query, $bindings);
+        if ($this->statement($query, $bindings)) {
+            return $this->PDO->lastInsertId();
+        } else {
+            return 0;
+        }
     }
 
     public function update($query, $bindings = []): int

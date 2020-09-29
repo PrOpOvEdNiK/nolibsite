@@ -1,5 +1,6 @@
 <?php
 
+use BS\Auth\AuthManager;
 use BS\Settings\Config;
 
 session_start();
@@ -44,3 +45,5 @@ if (Config::getMode() == 'dev') {
     ini_set('display_errors', 'off');
     error_reporting(0);
 }
+
+new AuthManager();

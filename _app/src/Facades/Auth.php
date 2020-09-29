@@ -6,8 +6,12 @@ namespace BS\Facades;
 use BS\Auth\AuthManager;
 
 /**
- * @method static bool register(array $arFields)
+ * @method static void logout(string $redirect = "")
+ * @method static void login(string $login, string $password)
+ * @method static mixed register(array $arFields)
  * @method static bool check()
+ * @method static array getUser()
+ * @method static string getUserFullName()
  *
  * @see AuthManager
  */

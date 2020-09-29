@@ -20,6 +20,9 @@ class User extends Model
                 "TYPE" => Validator::INT,
                 "AUTO" => true
             ],
+            "EMAIL"      => [
+                "TYPE"       => Validator::EMAIL
+            ],
             "LAST_NAME"      => [
                 "TYPE"       => Validator::STRING,
                 "MIN_LENGTH" => 2,
@@ -63,12 +66,19 @@ class User extends Model
             ],
             "PASSWORD"       => [
                 "TYPE"       => Validator::STRING,
+                "MIN_LENGTH" => 6,
                 "MAX_LENGTH" => 50
             ],
             "HASH"           => [
                 "TYPE"       => Validator::STRING,
+                "MIN_LENGTH" => 6,
                 "MAX_LENGTH" => 50
             ],
         ];
+    }
+
+    public static function getByHash($hash)
+    {
+        return static::read(['HASH' => $hash]);
     }
 }

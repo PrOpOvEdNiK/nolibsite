@@ -13,7 +13,7 @@ abstract class Model
 
     abstract public static function getMap();
 
-    public static function create($arFields): bool
+    public static function create($arFields): int
     {
         static::validateFields($arFields);
 
@@ -150,5 +150,20 @@ abstract class Model
         if ($arErrors) {
             throw new ValidateException($arErrors);
         }
+    }
+
+    public static function getById($id): array
+    {
+        $arMap = static::getMap();
+        if (in_array('ID', array_keys($arMap))) {
+            return static::read(['ID' => $id]);
+        } else {
+            return [];
+        }
+    }
+
+    public static function getFirst($arFilter = [], $arSelect = ['*'], $arOrder = [], $arLimit = []): array
+    {
+        return static::read($arFilter, $arSelect, $arOrder, $arLimit)[0];
     }
 }

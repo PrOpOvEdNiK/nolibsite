@@ -5,7 +5,7 @@ return [
         'host'     => 'anketa.buynitsky.ru',
         'database' => 'anketa_buynitsky',
         'user'     => 'anketa',
-        'password' => '',
+        'password' => 'ZXCasdqwe123',
     ],
     'app'        => [
         'mode'          => 'dev',
