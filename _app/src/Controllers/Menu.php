@@ -3,19 +3,22 @@
 namespace BS\Controllers;
 
 
+use BS\Facades\Auth;
+
 class Menu extends Controller
 {
     public function execute()
     {
-        $this->arResult = [
-            [
-                'TITLE' => 'Главная',
-                'LINK' => '/',
-            ],
-            [
-                'TITLE' => 'Новости',
-                'LINK' => '/news/',
-            ],
+        if (Auth::isAdmin()) {
+            $this->arResult['MENU'][] = [
+                'TITLE' => 'Админка',
+                'LINK' => '/admin/',
+            ];
+        }
+
+        $this->arResult['MENU'][] = [
+            'TITLE' => 'Главная',
+            'LINK' => '/',
         ];
     }
 }

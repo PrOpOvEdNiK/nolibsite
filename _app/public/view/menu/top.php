@@ -4,7 +4,7 @@
 
 ?>
 <nav>
-    <? foreach ($arResult as $arItem): ?>
+    <? foreach ($arResult['MENU'] as $arItem): ?>
         <div>
             <a href="<?= $arItem['LINK'] ?>">
                 <?= $arItem['TITLE'] ?>

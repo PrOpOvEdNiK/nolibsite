@@ -16,16 +16,21 @@ global $pageTitle;
 </head>
 <body class="app">
 <header class="app__header">
-    <div class="container">
-        <div class="container__row">
+    <section class="container">
+        <div class="row">
             <div class="header__nav">
                 <? callComponent('Menu', 'menu/top'); ?>
             </div>
+
+            <div class="header__title">
+                <?= \BS\Facades\Config::getAppName(); ?>
+            </div>
+
             <div class="header__account">
                 <? callComponent('AccountMenu', 'menu/top'); ?>
             </div>
         </div>
-    </div>
+    </section>
 </header>
 
 <main class="app__main">

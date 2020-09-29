@@ -10,8 +10,10 @@ use BS\Auth\AuthManager;
  * @method static void login(string $login, string $password)
  * @method static mixed register(array $arFields)
  * @method static bool check()
+ * @method static bool isAdmin()
  * @method static array getUser()
  * @method static string getUserFullName()
+ * @method static array getUserRoles()
  *
  * @see AuthManager
  */

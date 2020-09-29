@@ -11,10 +11,9 @@ abstract class Controller
     public $viewTemplate;
     public $arResult = [];
 
-    final public function __construct($viewTemplate = "_default")
+    final public function __construct($viewTemplate)
     {
-        $viewFolder = mb_strtolower((new \ReflectionClass($this))->getShortName());
-        $this->viewTemplate = $_SERVER['DOCUMENT_ROOT'] . self::PATH_VIEW . "{$viewFolder}/{$viewTemplate}.php";
+        $this->viewTemplate = $_SERVER['DOCUMENT_ROOT'] . self::PATH_VIEW . "{$viewTemplate}.php";
 
         $this->execute();
         $this->includeTemplate();

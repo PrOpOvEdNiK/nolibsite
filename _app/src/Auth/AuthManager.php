@@ -119,4 +119,18 @@ class AuthManager
     {
         return "{$this->arUser['LAST_NAME']} {$this->arUser['FIRST_NAME']} {$this->arUser['SECOND_NAME']}";
     }
+
+    public function getUserRoles(): array
+    {
+        return $this->arUser['ROLES'] ?? [];
+    }
+
+    public function isAdmin(): bool
+    {
+        $arRoles = $this->getUserRoles();
+        $arRolesSlugs = array_column($arRoles, 'SLUG');
+
+        return in_array('webmaster', $arRolesSlugs);
+    }
+
 }
