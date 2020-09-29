@@ -1,5 +1,5 @@
 <?php
-    global $pageTitle;
+global $pageTitle;
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -17,11 +17,13 @@
 <body class="app">
 <header class="app__header">
     <div class="container">
-        <div class="header__nav">
-            <? new \BS\Controllers\Menu('top'); ?>
-        </div>
-        <div class="header__account">
-            <? new \BS\Controllers\Menu('top'); ?>
+        <div class="container__row">
+            <div class="header__nav">
+                <? callComponent('Menu', 'menu/top'); ?>
+            </div>
+            <div class="header__account">
+                <? callComponent('AccountMenu', 'menu/top'); ?>
+            </div>
         </div>
     </div>
 </header>

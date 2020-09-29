@@ -34,3 +34,9 @@ function wordPlural($count, array $arWords)
     }
     return $arWords[2];
 }
+
+function callComponent($controller, $view)
+{
+    $fullController = "\\BS\\Controllers\\{$controller}";
+    new $fullController($view);
+}
