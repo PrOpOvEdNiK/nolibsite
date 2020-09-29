@@ -1,7 +1,7 @@
 <?php
 
 use BS\Auth\AuthManager;
-use BS\Settings\Config;
+use BS\Facades\Config;
 
 session_start();
 

@@ -6,40 +6,12 @@ namespace BS\Settings;
 
 final class Config
 {
-    /**
-     * @var Config;
-     */
-    private static $instance;
-
-    public function __construct()
-    {
-    }
-
-    public function __clone()
-    {
-    }
-
     private $arConfig = [];
     private $isLoaded = false;
 
     private const CONFIG_FILE_PATH = "/_app/_config.php";
 
-    public static function getInstance(): Config
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new static();
-        }
-
-        return self::$instance;
-    }
-
-    public static function getValue($name)
-    {
-        $config = Config::getInstance();
-        return $config->get($name);
-    }
-
-    public function get($name)
+    private function get($name)
     {
         if (!$this->isLoaded) {
             $this->loadConfiguration();
@@ -61,6 +33,7 @@ final class Config
             $dataTmp = include($path);
             if (is_array($dataTmp)) {
                 $this->arConfig = $dataTmp;
+                $this->isLoaded = true;
             }
         }
     }
@@ -71,13 +44,23 @@ final class Config
         return preg_replace("'[\\\\/]+'", "/", $path);
     }
 
-    public static function getDsn()
+    public function getValue($name)
     {
-        return self::getValue('connection');
+        return $this->get($name);
     }
 
-    public static function getMode()
+    public function getDsn()
     {
-        return self::getValue('app')['mode'];
+        return $this->getValue('connection');
+    }
+
+    public function getAppName()
+    {
+        return $this->getValue('app')['name'];
+    }
+
+    public function getMode()
+    {
+        return $this->getValue('app')['mode'];
     }
 }

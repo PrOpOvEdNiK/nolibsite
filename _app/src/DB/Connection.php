@@ -4,7 +4,7 @@
 namespace BS\DB;
 
 
-use BS\Settings\Config;
+use BS\Facades\Config;
 use DateTimeInterface;
 use PDO;
 use PDOStatement;

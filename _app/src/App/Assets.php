@@ -4,7 +4,7 @@
 namespace BS\App;
 
 
-use BS\Settings\Config;
+use BS\Facades\Config;
 
 class Assets
 {
