@@ -1,14 +1,13 @@
 <?php
 
+namespace BS\Controllers;
 
-namespace BS\App;
 
-
-class Menu
+class Menu extends Controller
 {
-    public static function get()
+    public function execute()
     {
-        return [
+        $this->arResult = [
             [
                 'TITLE' => 'Главная',
                 'LINK' => '/',
