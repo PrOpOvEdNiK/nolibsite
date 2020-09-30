@@ -1,11 +1,12 @@
 <?php
 
-namespace BS\Controllers;
+namespace BS\Controllers\Menu;
 
 
+use BS\Controllers\Controller;
 use BS\Facades\Auth;
 
-class AccountMenu extends Controller
+class AccountHeader extends Controller
 {
     public function execute()
     {
@@ -14,18 +15,21 @@ class AccountMenu extends Controller
             $this->arResult['MENU'] = [
                 [
                     'TITLE' => 'Мой профиль',
-                    'LINK' => '/account/',
+                    'LINK'  => '/account/',
+                    'CLASS' => 'button--green',
                 ]
             ];
         } else {
             $this->arResult['MENU'] = [
                 [
                     'TITLE' => 'Регистрация',
-                    'LINK' => '/auth/register/',
+                    'LINK'  => '/auth/register/',
+                    'CLASS' => 'button--transparent',
                 ],
                 [
                     'TITLE' => 'Авторизация',
-                    'LINK' => '/auth/',
+                    'LINK'  => '/auth/',
+                    'CLASS' => 'button--green',
                 ],
             ];
         }

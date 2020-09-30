@@ -35,8 +35,18 @@ function wordPlural($count, array $arWords)
     return $arWords[2];
 }
 
-function callComponent($controller, $view)
+function callComponent($controller, $view, $arParams = [])
 {
     $fullController = "\\BS\\Controllers\\{$controller}";
-    new $fullController($view);
+    if (class_exists($fullController)) {
+        new $fullController($view, $arParams);
+    } else {
+        showError("Контроллер '{$fullController}' не найден");
+    }
+}
+
+function showError($text = 'Ошибка') {
+    echo <<<HTML
+<div class="app__error">{$text}</div>
+HTML;
 }

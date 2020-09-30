@@ -1,5 +1,6 @@
 <?php
 global $pageTitle;
+use BS\Facades\Config;
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@ global $pageTitle;
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
 
-    <title><?= $pageTitle ?> | Анкетирование</title>
+    <title><?= $pageTitle ?> | <?= Config::getAppName(); ?></title>
     <meta name="description" content="Демонстрационный сайт">
 
     <link rel="stylesheet" href="<?= APP_ASSETS_PATH ?>/css/app.css<?= BS\App\Assets::getVersion() ?>">
@@ -17,17 +18,19 @@ global $pageTitle;
 <body class="app">
 <header class="app__header">
     <section class="container">
-        <div class="row">
-            <div class="header__nav">
-                <? callComponent('Menu', 'menu/top'); ?>
-            </div>
+        <div class="row jcsb">
+            <div class="row">
+                <div class="header__title">
+                    <a href="/" class="h1"><?= Config::getAppName(); ?></a>
+                </div>
 
-            <div class="header__title">
-                <?= \BS\Facades\Config::getAppName(); ?>
+                <div class="header__nav">
+                    <? callComponent('Menu\\Top', 'menu/top'); ?>
+                </div>
             </div>
 
             <div class="header__account">
-                <? callComponent('AccountMenu', 'menu/top'); ?>
+                <? callComponent('Menu\\AccountHeader', 'menu/account'); ?>
             </div>
         </div>
     </section>

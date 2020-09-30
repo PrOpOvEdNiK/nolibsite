@@ -1,6 +1,11 @@
 body {
     margin: 0;
     padding: 0;
+    font-family: Cambria, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: $black;
+    background-color: $white;
 }
 
 .container {
@@ -49,11 +54,45 @@ body {
     justify-content: space-between;
     min-height: 100vh;
 
-    &__header {}
-
-    &__main {
-        height: 100%;
+    &__header {
+        background-color: $black;
+        color: $white;
+        padding: 16px 0;
+        margin-bottom: 16px;
     }
 
-    &__footer {}
+    &__main {
+        flex-grow: 3;
+    }
+
+    &__footer {
+        background-color: $black;
+        color: $white;
+        padding: 32px 0;
+    }
+
+    &__error {
+        max-width: 500px;
+        width: fit-content;
+        margin: 16px auto;
+        padding: 24px;
+        border: 1px solid red;
+        color: red;
+    }
+}
+
+.header {
+
+    &__title {
+        margin-right: 32px;
+
+        a {
+            color: $white;
+            text-decoration: none;
+
+            &:hover {
+                color: $white;
+            }
+        }
+    }
 }

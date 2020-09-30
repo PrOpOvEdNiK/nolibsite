@@ -10,10 +10,12 @@ abstract class Controller
 
     public $viewTemplate;
     public $arResult = [];
+    public $arParams = [];
 
-    final public function __construct($viewTemplate)
+    final public function __construct($viewTemplate, $arParams)
     {
         $this->viewTemplate = $_SERVER['DOCUMENT_ROOT'] . self::PATH_VIEW . "{$viewTemplate}.php";
+        $this->arParams = $arParams;
 
         $this->execute();
         $this->includeTemplate();
@@ -22,6 +24,7 @@ abstract class Controller
     protected function includeTemplate()
     {
         $arResult = $this->arResult;
+        $arParams = $this->arParams;
         include $this->viewTemplate;
     }
 

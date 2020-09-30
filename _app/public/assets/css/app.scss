@@ -1,1 +1,7 @@
-@import "scss/layout";
+@import "scss/common/vars";
+@import "scss/common/layout";
+@import "scss/common/typo";
+
+@import "scss/elements/buttons";
+
+@import "scss/components/nav";
