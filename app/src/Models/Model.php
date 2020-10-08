@@ -22,6 +22,13 @@ abstract class Model
         return DB::insert("INSERT INTO {$table} {$sBindings};", $arFields);
     }
 
+    /**
+     * @param array $arFilter [[$column, $sign, $value]]
+     * @param string[] $arSelect
+     * @param array $arOrder
+     * @param array $arLimit
+     * @return array
+     */
     public static function read($arFilter = [], $arSelect = ['*'], $arOrder = [], $arLimit = []): array
     {
         $table = static::getTableName();
@@ -91,6 +98,9 @@ abstract class Model
         $arValuesMap = [];
         foreach ($arFilter as $arItem) {
             [$column, $sign, $value] = $arItem;
+            if ($sign == 'LIKE') {
+                $value = "%{$value}%";
+            }
             $arValuesMap[$column] = $value;
 
             $arFilterParts[] = "{$column} {$sign} :{$column}";
@@ -156,7 +166,7 @@ abstract class Model
     {
         $arMap = static::getMap();
         if (in_array('ID', array_keys($arMap))) {
-            return static::read(['ID' => $id]);
+            return static::read(['ID', '=', $id]);
         } else {
             return [];
         }

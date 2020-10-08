@@ -1,0 +1,9 @@
+.form {
+
+    &__errors {
+        margin: 16px 0;
+        padding: 24px;
+        background-color: #e38d8d;
+        border-left: 2px solid red;
+    }
+}

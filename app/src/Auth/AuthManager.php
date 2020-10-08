@@ -4,6 +4,7 @@
 namespace BS\Auth;
 
 
+use BS\Facades\Auth;
 use BS\Main\Application;
 use BS\Main\Request;
 use BS\Models\User;
@@ -41,12 +42,11 @@ class AuthManager
 
     private function loginByHash()
     {
-        $this->logout();
         if ($this->checkCsrf()) {
             $arUser = User::getByHash($this->currentHash);
             $this->loginInternal($arUser);
         } else {
-            $_SESSION['AUTH_HASH'] = $this->currentHash;
+            $this->logout();
         }
     }
 
@@ -56,11 +56,11 @@ class AuthManager
             if (!$this->checkCsrf()) {
                 User::update(['ID' => $arUser['ID']], ['HASH' => $this->currentHash]);
             }
-
-            $_SESSION['AUTH_HASH'] = $this->currentHash;
             $arUser['HASH'] = $this->currentHash;
             $this->arUser = $arUser;
         }
+
+        $_SESSION['AUTH_HASH'] = $this->currentHash;
     }
 
     public function logout($redirect = ""): void
@@ -69,7 +69,7 @@ class AuthManager
 
         if ($redirect != "") {
             Application::getInstance()->getRouter()->getResponse()
-                ->redirect('/', 307);
+                ->redirect(ROUTE_HOMEPAGE, 307);
         }
     }
 
@@ -82,38 +82,51 @@ class AuthManager
 
     public function register(array $arFields)
     {
-        if (!$arFields['PASSWORD']) {
+        $arUser = $arFields['fields'];
+
+        if (!Auth::checkCsrf($arFields['csrf'])) {
+            $this->arErrors['csrf'][] = 'Ошибка доступа';
+        }
+
+        if (trim($arUser['PASSWORD']) == "") {
             $this->arErrors['PASSWORD'][] = 'Пароль не может быть пустым';
         }
-        if (!$arFields['PASSWORD2']) {
+        if (trim($arFields['PASSWORD2']) == "") {
             $this->arErrors['PASSWORD2'][] = 'Подтверждение пароля не может быть пустым';
         }
-        if ($arFields['PASSWORD'] !== $arFields['PASSWORD2']) {
+        if ($arUser['PASSWORD'] !== $arFields['PASSWORD2']) {
             $passwordsError = 'Пароли не совпадают';
             $this->arErrors['PASSWORD'][] = $passwordsError;
             $this->arErrors['PASSWORD2'][] = $passwordsError;
         }
-        unset($arFields['PASSWORD2']);
 
-        $arFields['PASSWORD'] = Hasher::register($arFields['PASSWORD']);
-        $arFields['HASH'] = Hasher::client();
+        $arUser['PASSWORD'] = Hasher::register($arUser['PASSWORD']);
+        $arUser['HASH'] = $arFields['csrf'];
 
         $userId = 0;
         try {
-            $userId = User::create($arFields);
+            $userId = User::create($arUser);
         } catch (ValidateException $e) {
             $this->arErrors += unserialize($e->getMessage());
         }
+
+        $arResult = [
+            'SUCCESS' => false,
+            'RESULT'  => $userId,
+            'ERRORS'  => []
+        ];
 
         if ($userId == 0) {
             $this->arErrors[] = "Ошибка при создании пользователя";
         }
 
         if ($this->arErrors) {
-            return $this->arErrors;
+            $arResult['ERRORS'] = $this->arErrors;
+            return $arResult;
         }
 
         $this->loginById($userId);
+        $arResult['SUCCESS'] = true;
 
         return $userId;
     }
@@ -151,7 +164,7 @@ class AuthManager
         return $this->currentHash;
     }
 
-    public function checkCsrf(string $csrf = null): bool
+    public function checkCsrf(?string $csrf = null): bool
     {
         if (!$csrf) {
             $csrf = $this->lastHash;

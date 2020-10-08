@@ -1,6 +1,7 @@
 <?php
 
-function s($var) {
+function s($var)
+{
     $backTrace = debug_backtrace();
     $backTraceFile = $backTrace[0]['file'];
     $backTraceLine = $backTrace[0]['line'];
@@ -45,9 +46,22 @@ function includeComponent($component, $view, $arParams = [])
     }
 }
 
-function showError($text = 'Ошибка') {
-    echo <<<HTML
-<div class="app__error">{$text}</div>
-HTML;
+function showError(string $error)
+{
+    echo "<div class='error'>{$error}</div>";
+}
+
+function showFormErrors(array $arRawErrors)
+{
+    $arErrors = [];
+    foreach ($arRawErrors as $arRawError) {
+        if ($arRawError) {
+            foreach ($arRawError as $item) {
+                $arErrors[] = $item;
+            }
+        }
+    }
+
+    return implode("<br>", array_unique($arErrors));
 }
 

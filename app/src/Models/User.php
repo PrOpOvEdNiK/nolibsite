@@ -79,6 +79,9 @@ class User extends Model
 
     public static function getByHash($hash)
     {
-        return static::read(['HASH' => $hash]);
+        $arFilter = [
+            ['HASH', '=', $hash]
+        ];
+        return static::read($arFilter);
     }
 }

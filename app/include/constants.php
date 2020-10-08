@@ -7,6 +7,8 @@ define('PATH_APP_PAGES', PATH_APP_VIEWS . '/_pages');
 
 define('PATH_PUBLIC_ASSETS', '/assets');
 
+define('ROUTE_HOMEPAGE', '/');
 define('ROUTE_LOGIN', '/auth/');
+define('ROUTE_REGISTER', '/auth/register/');
 
 define('DB_FALLBACK_LIMIT', 10);

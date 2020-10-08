@@ -41,4 +41,14 @@ abstract class Controller
     }
 
     abstract public function execute();
+
+    protected function setMeta(string $h1, ?string $title = null, ?string $description = null, ?string $keywords = null)
+    {
+        $this->arResult['SEO'] = [
+            'h1'          => $h1,
+            'title'       => $title ?? $h1,
+            'description' => $description ?? $h1,
+            'keywords'    => $keywords
+        ];
+    }
 }

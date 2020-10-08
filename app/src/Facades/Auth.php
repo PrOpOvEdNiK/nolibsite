@@ -15,7 +15,7 @@ use BS\Auth\AuthManager;
  * @method static string getUserFullName()
  * @method static array getUserRoles()
  * @method static string getCsrf()
- * @method static bool checkCsrf(string $csrf = null)
+ * @method static bool checkCsrf(?string $csrf = null)
  *
  * @see AuthManager
  */

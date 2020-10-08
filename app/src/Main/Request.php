@@ -8,6 +8,7 @@ class Request
 {
     private $get;
     private $post;
+    private $files;
     private $server;
     private $session;
 
@@ -15,6 +16,7 @@ class Request
     {
         $this->get = $_GET;
         $this->post = $_POST;
+        $this->files = $_FILES;
         $this->server = $_SERVER;
         $this->session = $_SESSION;
     }
@@ -33,6 +35,14 @@ class Request
     public function getPost(): array
     {
         return $this->post;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFiles(): array
+    {
+        return $this->files;
     }
 
     /**

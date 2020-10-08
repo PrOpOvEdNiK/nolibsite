@@ -66,7 +66,7 @@ class Router
     private function runRoute(Route $route)
     {
         if ($route->isSecure && !Auth::check()) {
-            $this->response->redirect(PATH_PUBLIC_LOGIN, 307);
+            $this->response->redirect(ROUTE_LOGIN, 307);
         }
 
         /**
