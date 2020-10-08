@@ -17,7 +17,8 @@ class AuthManager
      */
     private $request;
 
-    private $authHash;
+    private $lastHash;
+    private $currentHash;
     private $arUser;
 
     private $arErrors = [];
@@ -25,9 +26,10 @@ class AuthManager
     public function __construct()
     {
         $this->request = Application::getInstance()->getRequest();
-        $this->authHash = $this->request->filter('AUTH_HASH', 'session', FILTER_SANITIZE_STRING);
+        $this->lastHash = $this->request->filter('AUTH_HASH', 'session', FILTER_SANITIZE_STRING);
+        $this->currentHash = Hasher::client();
 
-        $this->loginByHash($this->authHash);
+        $this->loginByHash();
     }
 
     private function loginById($id)
@@ -37,28 +39,27 @@ class AuthManager
         $this->loginInternal($arUser);
     }
 
-    private function loginByHash($hash = null)
+    private function loginByHash()
     {
         $this->logout();
-        $clientHash = Hasher::client();
-        if ($clientHash === $hash) {
-            $arUser = User::getByHash($this->authHash);
+        if ($this->checkCsrf()) {
+            $arUser = User::getByHash($this->currentHash);
             $this->loginInternal($arUser);
+        } else {
+            $_SESSION['AUTH_HASH'] = $this->currentHash;
         }
     }
 
     private function loginInternal($arUser)
     {
         if ($arUser['ID']) {
-            $clientHash = Hasher::client();
-
-            if ($clientHash !== $this->authHash) {
-                User::update(['ID' => $arUser['ID']], ['HASH' => $clientHash]);
+            if (!$this->checkCsrf()) {
+                User::update(['ID' => $arUser['ID']], ['HASH' => $this->currentHash]);
             }
 
-            $arUser['HASH'] = $clientHash;
+            $_SESSION['AUTH_HASH'] = $this->currentHash;
+            $arUser['HASH'] = $this->currentHash;
             $this->arUser = $arUser;
-            $_SESSION['AUTH_HASH'] = $arUser['HASH'];
         }
     }
 
@@ -67,8 +68,8 @@ class AuthManager
         $_SESSION['AUTH_HASH'] = "";
 
         if ($redirect != "") {
-            http_response_code("302 Moved Temporarily");
-            header("Location: " . $redirect);
+            Application::getInstance()->getRouter()->getResponse()
+                ->redirect('/', 307);
         }
     }
 
@@ -145,4 +146,17 @@ class AuthManager
         return in_array('webmaster', $arRolesSlugs);
     }
 
+    public function getCsrf(): string
+    {
+        return $this->currentHash;
+    }
+
+    public function checkCsrf(string $csrf = null): bool
+    {
+        if (!$csrf) {
+            $csrf = $this->lastHash;
+        }
+
+        return $csrf === $this->currentHash;
+    }
 }

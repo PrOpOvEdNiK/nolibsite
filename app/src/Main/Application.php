@@ -12,7 +12,6 @@ class Application
      * @var Application
      */
     private static $instance;
-    private static $i;
 
     /**
      * @var Router
@@ -41,11 +40,6 @@ class Application
 
     public static function getInstance(): Application
     {
-        if (self::$i++ > 5) {
-            s(self::$i);
-            s(self::$instance);
-            die;
-        }
         if (!isset(self::$instance)) {
             self::$instance = new self();
         }
