@@ -50,17 +50,23 @@ class AuthManager
         }
     }
 
-    private function loginInternal($arUser)
+    private function loginInternal($arUser): int
     {
         if ($arUser['ID']) {
             if (!$this->checkCsrf()) {
-                User::update(['ID' => $arUser['ID']], ['HASH' => $this->currentHash]);
+                User::update(
+                    [
+                        ['ID', '=', $arUser['ID']]
+                    ],
+                    ['HASH' => $this->currentHash]
+                );
             }
             $arUser['HASH'] = $this->currentHash;
             $this->arUser = $arUser;
         }
 
         $_SESSION['AUTH_HASH'] = $this->currentHash;
+        return (int)$arUser['ID'] ?? 0;
     }
 
     public function logout($redirect = ""): void
@@ -69,15 +75,19 @@ class AuthManager
 
         if ($redirect != "") {
             Application::getInstance()->getRouter()->getResponse()
-                ->redirect(ROUTE_HOMEPAGE, 307);
+                ->redirect($redirect, 307);
         }
     }
 
-    public function login($login, $password): void
+    public function login($login, $password): int
     {
-        $password = Hasher::register($password);
-        $arUser = User::getFirst(['EMAIL' => $login, 'PASSWORD' => $password]);
-        $this->loginInternal($arUser);
+        $arUser = User::getFirst(
+            [
+                ['EMAIL', '=', $login],
+                ['PASSWORD', '=', Hasher::register($password)]
+            ]
+        );
+        return $this->loginInternal($arUser);
     }
 
     public function register(array $arFields)
@@ -117,7 +127,7 @@ class AuthManager
         ];
 
         if ($userId == 0) {
-            $this->arErrors[] = "Ошибка при создании пользователя";
+            $this->arErrors[] = ["Ошибка при создании пользователя"];
         }
 
         if ($this->arErrors) {
@@ -128,12 +138,12 @@ class AuthManager
         $this->loginById($userId);
         $arResult['SUCCESS'] = true;
 
-        return $userId;
+        return $arResult;
     }
 
     public function check(): bool
     {
-        return intval($this->arUser['ID']) > 0;
+        return (int)$this->arUser['ID'] > 0;
     }
 
     public function getUser(): array

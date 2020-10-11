@@ -7,7 +7,7 @@ use BS\Auth\AuthManager;
 
 /**
  * @method static void logout(string $redirect = "")
- * @method static void login(string $login, string $password)
+ * @method static int login(string $login, string $password)
  * @method static mixed register(array $arFields)
  * @method static bool check()
  * @method static bool isAdmin()

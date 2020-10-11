@@ -166,13 +166,13 @@ abstract class Model
     {
         $arMap = static::getMap();
         if (in_array('ID', array_keys($arMap))) {
-            return static::read(['ID', '=', $id]);
+            return static::read([['ID', '=', $id]]);
         } else {
             return [];
         }
     }
 
-    public static function getFirst($arFilter = [], $arSelect = ['*'], $arOrder = [], $arLimit = []): array
+    public static function getFirst($arFilter = [], $arSelect = ['*'], $arOrder = [], $arLimit = []): ?array
     {
         return static::read($arFilter, $arSelect, $arOrder, $arLimit)[0];
     }

@@ -21,12 +21,13 @@ $arSave = $arResult['SAVE'];
 
         <form class="form" enctype="multipart/form-data" method="post">
             <input type="hidden" name="csrf" value="<?= Auth::getCsrf() ?>">
+            <input type="hidden" name="backurl" value="<?= ROUTE_ACCOUNT ?>">
             <input type="hidden" name="action" value="register">
 
             <div class="registration__step show" id="registration-step-1">
                 <div class="form__row">
                     <div class="form__input">
-                        <label for="registration-last-name">Фамилия*</label>
+                        <label for="registration-last-name">Фамилия</label>
                         <input id="registration-last-name" type="text" name="fields[LAST_NAME]"
                                maxlength="50" value="<?= $arFields['LAST_NAME'] ?>"
                         >
@@ -47,7 +48,7 @@ $arSave = $arResult['SAVE'];
 
                 <div class="form__row">
                     <div class="form__input">
-                        <label for="registration-email">Email*</label>
+                        <label for="registration-email">Email</label>
                         <input id="registration-email" type="email" name="fields[EMAIL]"
                                maxlength="50" value="<?= $arFields['EMAIL'] ?>"
                         >
@@ -93,27 +94,26 @@ $arSave = $arResult['SAVE'];
                 <div class="form__row">
                     <div class="form__input">
                         <label for="registration-profile">Личные качества</label>
-                        <textarea id="registration-profile" name="fields[PROFILE]">
-                            <?= $arFields['PROFILE'] ?>
-                        </textarea>
+                        <textarea id="registration-profile"
+                                  name="fields[PROFILE]"><?= $arFields['PROFILE'] ?></textarea>
                     </div>
                 </div>
                 <div class="form__row">
                     <div class="form__input">
                         <label for="registration-skils-1">Усидчивость</label>
-                        <input id="registration-skils-1" type="checkbox" name="fields[SKILS[]]" value="1">
+                        <input id="registration-skils-1" type="checkbox" name="SKILS[]" value="1">
                     </div>
                     <div class="form__input">
                         <label for="registration-skils-2">Опрятность</label>
-                        <input id="registration-skils-2" type="checkbox" name="fields[SKILS[]]" value="2">
+                        <input id="registration-skils-2" type="checkbox" name="SKILS[]" value="2">
                     </div>
                     <div class="form__input">
                         <label for="registration-skils-3">Самообучаемость</label>
-                        <input id="registration-skils-3" type="checkbox" name="fields[SKILS[]]" value="3">
+                        <input id="registration-skils-3" type="checkbox" name="SKILS[]" value="3">
                     </div>
                     <div class="form__input">
                         <label for="registration-skils-4">Трудолюбие</label>
-                        <input id="registration-skils-4" type="checkbox" name="fields[SKILS[]]" value="4">
+                        <input id="registration-skils-4" type="checkbox" name="SKILS[]" value="4">
                     </div>
                 </div>
             </div>
@@ -131,21 +131,20 @@ $arSave = $arResult['SAVE'];
                 <div class="form__row">
                     <div class="form__input">
                         <label for="registration-password">Пароль</label>
-                        <input id="registration-password" type="password" name="fields[PASSWORD]"
-                        >
+                        <input id="registration-password" type="password" name="fields[PASSWORD]">
                     </div>
                     <div class="form__row">
                         <div class="form__input">
                             <label for="registration-password2">Пароль еще раз</label>
-                            <input id="registration-password2" type="password" name="PASSWORD2"
-                            >
+                            <input id="registration-password2" type="password" name="PASSWORD2">
                         </div>
                     </div>
                 </div>
 
-                <div class="registration__actions">
+                <div class="form__actions">
                     <button type="submit">Зарегистрироваться</button>
                 </div>
+            </div>
         </form>
     </div>
 </div>

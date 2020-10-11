@@ -16,20 +16,21 @@ class AccountHeader extends Component
                 [
                     'TITLE' => 'Мой профиль',
                     'LINK'  => '/account/',
-                    'CLASS' => 'button--green',
-                ]
+                ],
+                [
+                    'TITLE' => 'Выход',
+                    'LINK'  => '/auth/logout/',
+                ],
             ];
         } else {
             $this->arResult['MENU'] = [
                 [
                     'TITLE' => 'Регистрация',
                     'LINK'  => '/auth/register/',
-                    'CLASS' => 'button--transparent',
                 ],
                 [
                     'TITLE' => 'Авторизация',
                     'LINK'  => '/auth/',
-                    'CLASS' => 'button--green',
                 ],
             ];
         }

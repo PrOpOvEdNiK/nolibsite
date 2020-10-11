@@ -7,7 +7,7 @@ use BS\Facades\Auth;
 ?>
 <section class="container">
     <div class="row">
-        <div class="welocme">
+        <div class="welcome">
             <? if (Auth::check()): ?>
                 <h2>Привет, <?= Auth::getUserFullName(); ?>!</h2>
             <? else: ?>

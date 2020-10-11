@@ -82,6 +82,6 @@ class User extends Model
         $arFilter = [
             ['HASH', '=', $hash]
         ];
-        return static::read($arFilter);
+        return static::read($arFilter)[0];
     }
 }

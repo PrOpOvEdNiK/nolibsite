@@ -29,7 +29,13 @@ abstract class Controller
 
         $this->viewTemplate = PATH_APP_PAGES . "/{$view}.php";
 
-        $this->execute();
+        if (file_exists($this->viewTemplate)) {
+            $this->execute();
+        } else {
+            $this->viewTemplate = PATH_APP_PAGES . "/" . PATH_404 . ".php";
+            $this->setMeta('Страница не найдена');
+            $this->response->setStatus(404);
+        }
     }
 
     public function render()

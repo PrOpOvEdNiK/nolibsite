@@ -12,6 +12,10 @@ class Registration extends Controller
 
     public function execute()
     {
+        if (Auth::check()) {
+            $this->response->redirect(ROUTE_ACCOUNT, 307);
+        }
+
         $this->setMeta('Регистрация');
 
         $this->arResult['POST'] = $this->request->getPost();
@@ -28,6 +32,12 @@ class Registration extends Controller
         switch ($action) {
             case 'register':
                 $this->arResult['SAVE'] = Auth::register($this->arResult['POST']);
+
+                if ($this->arResult['SAVE']['SUCCESS']) {
+                    $this->response->redirect(
+                        $this->request->filter('backurl', 'post', FILTER_SANITIZE_STRING)
+                    );
+                }
                 break;
         }
     }

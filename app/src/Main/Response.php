@@ -122,10 +122,6 @@ class Response
             $this->setHeader('Content-Type', 'text/html; charset=UTF-8');
         }
 
-        if (!array_key_exists('Content-Length', $this->headers)) {
-            $this->setHeader('Content-Length', mb_strlen($this->content));
-        }
-
         $this->setHeader('Powered', "Buynitsky Sergey");
     }
 
@@ -149,7 +145,7 @@ class Response
         $this->prepare();
         $this->sendHeaders();
         $this->sendContent();
-        die;
+        exit();
     }
 
     public function redirect($url, $status = 301): void
