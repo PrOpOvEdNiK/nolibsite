@@ -16,7 +16,7 @@ class Request
     {
         $this->get = $_GET;
         $this->post = $_POST;
-        $this->files = $_FILES;
+        $this->files = $this->prepareFiles();
         $this->server = $_SERVER;
         $this->session = $_SESSION;
     }
@@ -71,6 +71,11 @@ class Request
         return $this->post[$name];
     }
 
+    public function file(string $name)
+    {
+        return $this->files[$name];
+    }
+
     public function server(string $name)
     {
         return $this->server[$name];
@@ -110,5 +115,37 @@ class Request
         }
 
         return filter_var($value, $filter, $options);
+    }
+
+    private function prepareFiles(): array
+    {
+        $arFiles = [];
+        if (empty($_FILES)) {
+            return $arFiles;
+        }
+
+        foreach ($_FILES as $kFile => $file) {
+            if (is_array($file['name'])) {
+                for ($i = 0; $i < count($file['name']); $i++) {
+                    if (empty($file['name'][$i]) || $file['size'][$i] == 0) {
+                        continue;
+                    }
+                    $arFiles[$kFile][$i] = [
+                        'name'     => $file['name'][$i],
+                        'type'     => $file['type'][$i],
+                        'tmp_name' => $file['tmp_name'][$i],
+                        'error'    => $file['error'][$i],
+                        'size'     => $file['size'][$i],
+                    ];
+                }
+            } else {
+                if (empty($file['name']) || $file['size'] == 0) {
+                    continue;
+                }
+                $arFiles[$kFile][] = $file;
+            }
+        }
+
+        return $arFiles;
     }
 }

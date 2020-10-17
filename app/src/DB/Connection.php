@@ -94,14 +94,14 @@ final class Connection
         }
     }
 
-    public function update($query, $bindings = []): int
+    public function update($query, $bindings = []): bool
     {
-        return $this->affectingStatement($query, $bindings);
+        return $this->affectingStatement($query, $bindings) == 1;
     }
 
-    public function delete($query, $bindings = []): int
+    public function delete($query, $bindings = []): bool
     {
-        return $this->affectingStatement($query, $bindings);
+        return $this->affectingStatement($query, $bindings) == 1;
     }
 
     public function disconnect(): void

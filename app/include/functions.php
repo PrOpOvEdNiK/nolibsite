@@ -51,17 +51,14 @@ function showError(string $error)
     echo "<div class='error'>{$error}</div>";
 }
 
-function showFormErrors(array $arRawErrors)
+function showFormErrors(?array $arRawErrors): string
 {
-    $arErrors = [];
-    foreach ($arRawErrors as $arRawError) {
-        if ($arRawError) {
-            foreach ($arRawError as $item) {
-                $arErrors[] = $item;
-            }
-        }
-    }
+    return is_array($arRawErrors) ? implode("<br>", array_unique($arRawErrors)) : "";
+}
 
-    return implode("<br>", array_unique($arErrors));
+function showInpuError(?array $arRawErrors): void
+{
+    $errors = showFormErrors($arRawErrors);
+    echo "<span class='error'>{$errors}</span>";
 }
 

@@ -6,6 +6,8 @@ namespace BS\Main;
 
 use DateTime;
 
+use function serialize;
+
 class Validator
 {
     public const INT = 'int';
@@ -38,17 +40,17 @@ class Validator
         $string = filter_var(trim($value), FILTER_SANITIZE_STRING);
 
         if ($arRules['MAX_LENGTH'] && (mb_strlen($string) > $arRules['MAX_LENGTH'])) {
-            $plurarSymbols = wordPlural($arRules['MAX_LENGTH'], ['символ', 'символа', 'символов']);
+            $plurarSymbols = wordPlural($arRules['MAX_LENGTH'], ['символа', 'символов', 'символов']);
             $arErrors[] = "Значение должно быть короче {$arRules['MAX_RANGE']} {$plurarSymbols}";
         }
 
         if ($arRules['MIN_LENGTH'] && (mb_strlen($string) < $arRules['MIN_LENGTH'])) {
-            $plurarSymbols = wordPlural($arRules['MIN_LENGTH'], ['символ', 'символа', 'символов']);
-            $arErrors[] = "Значение должно быть длиннее {$arRules['MAX_RANGE']} {$plurarSymbols}";
+            $plurarSymbols = wordPlural($arRules['MIN_LENGTH'], ['символа', 'символов', 'символов']);
+            $arErrors[] = "Значение должно быть длиннее {$arRules['MIN_LENGTH']} {$plurarSymbols}";
         }
 
         if ($arRules['EQUALS'] && (mb_strlen($string) !== $arRules['EQUALS'])) {
-            $plurarSymbols = wordPlural($arRules['EQUALS'], ['символ', 'символа', 'символов']);
+            $plurarSymbols = wordPlural($arRules['EQUALS'], ['символа', 'символов', 'символов']);
             $arErrors[] = "Значение должно состоять из {$arRules['EQUALS']} {$plurarSymbols}";
         }
 
@@ -73,7 +75,7 @@ class Validator
             $arErrors[] = "Значние должно быть массивом";
         }
 
-        return \serialize($value);
+        return serialize($value);
     }
 
     public static function email(array $arRules, $value, &$arErrors):string

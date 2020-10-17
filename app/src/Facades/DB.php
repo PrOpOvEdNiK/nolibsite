@@ -11,8 +11,8 @@ use BS\DB\Connection;
  * @method static int affectingStatement(string $query, array $bindings = [])
  * @method static array select(string $query, array $bindings = [])
  * @method static bool insert(string $query, array $bindings = [])
- * @method static int delete(string $query, array $bindings = [])
- * @method static int update(string $query, array $bindings = [])
+ * @method static bool delete(string $query, array $bindings = [])
+ * @method static bool update(string $query, array $bindings = [])
  *
  * @see Connection
  */

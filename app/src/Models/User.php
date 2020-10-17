@@ -30,12 +30,10 @@ class User extends Model
             ],
             "FIRST_NAME"     => [
                 "TYPE"       => Validator::STRING,
-                "MIN_LENGTH" => 2,
                 "MAX_LENGTH" => 50
             ],
             "SECOND_NAME"    => [
                 "TYPE"       => Validator::STRING,
-                "MIN_LENGTH" => 2,
                 "MAX_LENGTH" => 50
             ],
             "BIRTH_DATE"     => [
@@ -53,9 +51,6 @@ class User extends Model
             "PROFILE"        => [
                 "TYPE"       => Validator::STRING,
                 "MAX_LENGTH" => 1000
-            ],
-            "SKILS"          => [
-                "TYPE" => Validator::SERIALIZE,
             ],
             "AVATAR"         => [
                 "TYPE"      => Validator::INT,
@@ -84,4 +79,14 @@ class User extends Model
         ];
         return static::read($arFilter)[0];
     }
+
+    public static function getByEmail($email)
+    {
+        $arFilter = [
+            ['EMAIL', '=', $email]
+        ];
+        return static::read($arFilter)[0];
+    }
+
+    // @todo after delete remove all references and files
 }

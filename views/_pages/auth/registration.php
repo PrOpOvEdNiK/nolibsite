@@ -15,7 +15,7 @@ $arSave = $arResult['SAVE'];
 
         <? if (!$arSave['SUCCESS'] && $arSave['ERRORS']): ?>
             <div class="form__errors">
-                <?= showFormErrors($arSave['ERRORS']); ?>
+                <?= showFormErrors($arSave['ERRORS'][0]); ?>
             </div>
         <? endif; ?>
 
@@ -31,18 +31,21 @@ $arSave = $arResult['SAVE'];
                         <input id="registration-last-name" type="text" name="fields[LAST_NAME]"
                                maxlength="50" value="<?= $arFields['LAST_NAME'] ?>"
                         >
+                        <? showInpuError($arSave['ERRORS']['LAST_NAME']); ?>
                     </div>
                     <div class="form__input">
                         <label for="registration-first-name">Имя</label>
                         <input id="registration-first-name" type="text" name="fields[FIRST_NAME]"
                                maxlength="50" value="<?= $arFields['FIRST_NAME'] ?>"
                         >
+                        <? showInpuError($arSave['ERRORS']['FIRST_NAME']); ?>
                     </div>
                     <div class="form__input">
                         <label for="registration-second-name">Отчество</label>
                         <input id="registration-second-name" type="text" name="fields[SECOND_NAME]"
                                maxlength="50" value="<?= $arFields['SECOND_NAME'] ?>"
                         >
+                        <? showInpuError($arSave['ERRORS']['SECOND_NAME']); ?>
                     </div>
                 </div>
 
@@ -52,6 +55,7 @@ $arSave = $arResult['SAVE'];
                         <input id="registration-email" type="email" name="fields[EMAIL]"
                                maxlength="50" value="<?= $arFields['EMAIL'] ?>"
                         >
+                        <? showInpuError($arSave['ERRORS']['EMAIL']); ?>
                     </div>
                 </div>
 
@@ -61,14 +65,15 @@ $arSave = $arResult['SAVE'];
                         <input id="registration-birth-date" type="date" name="fields[BIRTH_DATE]"
                                value="<?= $arFields['BIRTH_DATE'] ?>"
                         >
+                        <? showInpuError($arSave['ERRORS']['BIRTH_DATE']); ?>
                     </div>
                     <div class="form__input">
-                        <label for="registration-gender">Пол*</label>
+                        <label for="registration-gender">Пол</label>
                         <select name="fields[GENDER]" id="registration-gender">
-                            <option value="">---</option>
                             <option value="M">Мужской</option>
                             <option value="F">Женский</option>
                         </select>
+                        <? showInpuError($arSave['ERRORS']['GENDER']); ?>
                     </div>
                 </div>
             </div>
@@ -79,6 +84,7 @@ $arSave = $arResult['SAVE'];
                         <label for="registration-avatar">Аватар</label>
                         <input id="registration-avatar" type="file" name="AVATAR">
                     </div>
+                    <? showInpuError($arSave['ERRORS']['AVATAR']); ?>
                 </div>
                 <div class="form__row">
                     <div class="form__input">
@@ -86,6 +92,7 @@ $arSave = $arResult['SAVE'];
                         <input id="registration-favorite-color" type="color" name="fields[FAVORITE_COLOR]"
                                value="<?= $arFields['FAVORITE_COLOR'] ?>"
                         >
+                        <? showInpuError($arSave['ERRORS']['FAVORITE_COLOR']); ?>
                     </div>
                 </div>
             </div>
@@ -96,6 +103,7 @@ $arSave = $arResult['SAVE'];
                         <label for="registration-profile">Личные качества</label>
                         <textarea id="registration-profile"
                                   name="fields[PROFILE]"><?= $arFields['PROFILE'] ?></textarea>
+                        <? showInpuError($arSave['ERRORS']['PROFILE']); ?>
                     </div>
                 </div>
                 <div class="form__row">
@@ -123,6 +131,7 @@ $arSave = $arResult['SAVE'];
                     <div class="form__input">
                         <label for="registration-gallery">Дополнительные фотографии</label>
                         <input id="registration-gallery" type="file" name="GALLERY[]" multiple>
+                        <? showInpuError($arSave['ERRORS']['GALLERY']); ?>
                     </div>
                 </div>
             </div>
@@ -132,11 +141,13 @@ $arSave = $arResult['SAVE'];
                     <div class="form__input">
                         <label for="registration-password">Пароль</label>
                         <input id="registration-password" type="password" name="fields[PASSWORD]">
+                        <? showInpuError($arSave['ERRORS']['PASSWORD']); ?>
                     </div>
                     <div class="form__row">
                         <div class="form__input">
                             <label for="registration-password2">Пароль еще раз</label>
                             <input id="registration-password2" type="password" name="PASSWORD2">
+                            <? showInpuError($arSave['ERRORS']['PASSWORD2']); ?>
                         </div>
                     </div>
                 </div>

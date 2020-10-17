@@ -98,8 +98,14 @@ abstract class Model
         $arValuesMap = [];
         foreach ($arFilter as $arItem) {
             [$column, $sign, $value] = $arItem;
-            if ($sign == 'LIKE') {
-                $value = "%{$value}%";
+            switch ($sign) {
+                case 'LIKE':
+                    $value = "%{$value}%";
+                    break;
+                case 'IN':
+                    $sIn = implode(",", $value);
+                    $value = "({$sIn})";
+                    break;
             }
             $arValuesMap[$column] = $value;
 

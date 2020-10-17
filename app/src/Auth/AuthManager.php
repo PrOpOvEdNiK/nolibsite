@@ -5,10 +5,12 @@ namespace BS\Auth;
 
 
 use BS\Facades\Auth;
+use BS\Facades\File;
 use BS\Main\Application;
 use BS\Main\Request;
 use BS\Models\User;
 use BS\Models\ValidateException;
+use Exception;
 
 class AuthManager
 {
@@ -110,14 +112,45 @@ class AuthManager
             $this->arErrors['PASSWORD2'][] = $passwordsError;
         }
 
+        if (User::getByEmail($arUser['EMAIL'])) {
+            $this->arErrors['EMAIL'][] = 'Пользователь с таким email существует';
+        }
+
         $arUser['PASSWORD'] = Hasher::register($arUser['PASSWORD']);
         $arUser['HASH'] = $arFields['csrf'];
 
+        if ($this->request->has('AVATAR', 'files')) {
+            try {
+                $arUser['AVATAR'] = File::uploadImage(
+                    $this->request->file('AVATAR')[0],
+                    User::getTableName(),
+                    ['w' => 100, 'h' => 100]
+                );
+            } catch (Exception $e) {
+                $this->arErrors['AVATAR'][] = $e->getMessage();
+            }
+        }
+        if ($this->request->has('GALLERY', 'files')) {
+            try {
+                foreach ($this->request->file('GALLERY') as $arFile) {
+                    $arUser['GALLERY'][] = File::uploadImage(
+                        $arFile,
+                        User::getTableName(),
+                        ['w' => 500]
+                    );
+                }
+            } catch (Exception $e) {
+                $this->arErrors['GALLERY'][] = $e->getMessage();
+            }
+        }
+
         $userId = 0;
-        try {
-            $userId = User::create($arUser);
-        } catch (ValidateException $e) {
-            $this->arErrors += unserialize($e->getMessage());
+        if (empty($this->arErrors)) {
+            try {
+                $userId = User::create($arUser);
+            } catch (ValidateException $e) {
+                $this->arErrors += unserialize($e->getMessage());
+            }
         }
 
         $arResult = [
@@ -127,7 +160,7 @@ class AuthManager
         ];
 
         if ($userId == 0) {
-            $this->arErrors[] = ["Ошибка при создании пользователя"];
+            $this->arErrors[] = ["При регистрации возникли ошибки"];
         }
 
         if ($this->arErrors) {
